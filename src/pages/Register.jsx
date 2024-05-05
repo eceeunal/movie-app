@@ -6,14 +6,15 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 const Register = () => {
   const [info, setInfo] = useState({firstName: "", lastName: "", email: "", password: ""})
 
-  const {createUser} = useAuthContext()
+  const {createUser, googleProvider} = useAuthContext()
 
   const handleChange = (e) => setInfo({...info, [e.target.name]: e.target.value});
 
-  const {email, password} = info;
+  const {email, password, firstName, lastName} = info;
   const handlesubmit =(e) => {
     e.preventDefault();
-    createUser(email, password);
+    const displayName = `${firstName} ${lastName}`
+    createUser(email, password, displayName);
     console.log(info);
   };
   
@@ -43,6 +44,7 @@ const Register = () => {
                 type="text"
                 required
                 placeholder=" "
+                onChange={handleChange}
               />
               <label htmlFor="floating_text">Last Name</label>
             </div>
@@ -52,6 +54,7 @@ const Register = () => {
                 className="peer"
                 type="email"
                 placeholder=" "
+                onChange={handleChange}
                 required
               />
               <label htmlFor="floating_email">Email</label>
@@ -62,6 +65,7 @@ const Register = () => {
                 className="peer"
                 type="password"
                 placeholder=" "
+                onChange={handleChange}
                 required
               />
               <label htmlFor="floating_password">Password</label>
@@ -72,6 +76,7 @@ const Register = () => {
             <button
               className="flex justify-between text-center items-center btn-danger"
               type="button"
+              onClick={() => googleProvider()}
             >
               Continue with Google
               <GoogleIcon color="currentColor" />
